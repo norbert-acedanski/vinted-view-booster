@@ -60,7 +60,9 @@ class ViewBooster:
             try:
                 self.driver.find_element(by=By.XPATH, value=user_xpath).click()
             except NoSuchElementException as e:
-                if self.driver.find_element(by=By.XPATH, value="//*[@id='content']//span[@class='empty-state__content']").is_displayed():
+                if self.driver.find_element(by=By.XPATH,
+                                            value="//*[@id='content']//span[@class='empty-state__content']") \
+                        .is_displayed():
                     raise NoSuchElementException("No match found!")
                 else:
                     print(e)
