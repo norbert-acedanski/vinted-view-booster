@@ -100,7 +100,7 @@ if __name__ == "__main__":
     number_of_refreshes = 9
     list_of_vinted_members_to_refresh = ["norbert97a", "stokrotka0299", "kamanna"]
     view_booster = ViewBooster()
-    for member_number, member in enumerate(list_of_vinted_members_to_refresh[::-1]):
+    for member_number, member in enumerate(list_of_vinted_members_to_refresh):
         start_time = time.time()
         view_booster.open_url("https://www.vinted.pl/")
         view_booster.decline_all_cookies() if member_number == 0 else None
