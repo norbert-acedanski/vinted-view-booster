@@ -24,7 +24,8 @@ class ViewBooster:
 
     def open_url(self, url: str) -> None:
         self.driver.get(url)
-        assert "Vinted" in self.driver.title
+        time.sleep(1) if self.driver.title == "" else None
+        assert "Vinted" in self.driver.title, f"Expected 'Vinted' in browser title, got {self.driver.title} instead"
 
     def decline_all_cookies(self) -> None:
         self.driver.find_element(by=By.XPATH, value="//*[@id='onetrust-reject-all-handler']").click()
@@ -102,7 +103,7 @@ if __name__ == "__main__":
     number_of_refreshes = 9
     list_of_vinted_members_to_refresh = ["norbert97a", "stokrotka0299", "kamanna"]
     view_booster = ViewBooster()
-    for member_number, member in enumerate(list_of_vinted_members_to_refresh):
+    for member_number, member in enumerate(list_of_vinted_members_to_refresh[::-1]):
         start_time = time.time()
         view_booster.open_url("https://www.vinted.pl/")
         view_booster.decline_all_cookies() if member_number == 0 else None
@@ -113,7 +114,10 @@ if __name__ == "__main__":
         while len(view_booster.all_visible_user_items()) != number_of_items:
             view_booster.scroll_max_down()
         all_items_url = view_booster.get_all_items_url()
-        print(f"Current member: {member}\n")
+        print(f"\nCurrent member: {member}")
+        print(f"Number of items found: {number_of_items}")
+        print(f"Number of refreshes for each item: {number_of_refreshes}")
+        print(f"Number of all refreshes for all items: {number_of_refreshes*number_of_items}\n")
         for item_number, item_url in enumerate(all_items_url, 1):
             print(f"{item_number}/{len(all_items_url)}: "
                   f"{item_url[item_url.rfind('/') + item_url[item_url.rfind('/'):].find('-') + 1:]}")
