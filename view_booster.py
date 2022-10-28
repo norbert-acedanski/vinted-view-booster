@@ -24,8 +24,8 @@ class ViewBooster:
 
     def open_url(self, url: str) -> None:
         self.driver.get(url)
-        time.sleep(1) if self.driver.title == "" else None
-        assert "Vinted" in self.driver.title, f"Expected 'Vinted' in browser title, got {self.driver.title} instead"
+        time.sleep(2) if self.driver.title == "" else None
+        assert "Vinted" in self.driver.title, f"Expected 'Vinted' in browser title, got '{self.driver.title}' instead"
 
     def decline_all_cookies(self) -> None:
         self.driver.find_element(by=By.XPATH, value="//*[@id='onetrust-reject-all-handler']").click()
