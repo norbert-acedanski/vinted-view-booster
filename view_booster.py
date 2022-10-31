@@ -10,15 +10,21 @@ from selenium.webdriver.remote.webelement import WebElement
 
 class ViewBooster:
     def __init__(self) -> None:
-        chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument("--incognito")
-        chrome_options.add_argument("--disable-notifications")
-        chrome_options.add_argument("start-maximized")
-        chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
-        self.driver = webdriver.Chrome(executable_path="./chromedriver/chromedriver.exe", options=chrome_options)
+        self.chrome_options = webdriver.ChromeOptions()
+        self.chrome_options.add_argument("--incognito")
+        self.chrome_options.add_argument("--disable-notifications")
+        self.chrome_options.add_argument("start-maximized")
+        self.chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
+
+    def __enter__(self):
+        self.driver = webdriver.Chrome(executable_path="./chromedriver/chromedriver.exe", options=self.chrome_options)
         self.driver.implicitly_wait(10)
         self.current_option = None
         self.current_user = None
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close_window()
 
 # GENERAL
 
@@ -30,19 +36,11 @@ class ViewBooster:
     def decline_all_cookies(self) -> None:
         self.driver.find_element(by=By.XPATH, value="//*[@id='onetrust-reject-all-handler']").click()
 
-    def wait_for_confirm_choices(self) -> None:
-        try:
-            self.driver.find_element(by=By.XPATH, value="//*[@id='onetrust-accept-btn-handler']")
-        except NoSuchElementException:
-            print("Page did not load properly, refreshing...")
-            self.refresh_page()
-            self.wait_for_confirm_choices()
+    def refresh_page(self) -> None:
+        self.driver.refresh()
 
     def close_window(self) -> None:
         self.driver.close()
-
-    def refresh_page(self) -> None:
-        self.driver.refresh()
 
 # MAIN PAGE
 
@@ -83,8 +81,8 @@ class ViewBooster:
 
     def scroll_max_down(self) -> None:
         self.driver.execute_script("window.scrollTo(0,0)")
-        time.sleep(0.1)
         self.driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
+        time.sleep(0.5)
 
     def get_all_items_url(self) -> List[str]:
         items_xpath = "//*[contains(@class, 'feed-grid__item ')]//a"
@@ -100,35 +98,34 @@ class ViewBooster:
 
 
 if __name__ == "__main__":
-    number_of_refreshes = 9
+    number_of_refreshes = 4
     list_of_vinted_members_to_refresh = ["norbert97a", "stokrotka0299", "kamanna"]
-    view_booster = ViewBooster()
-    for member_number, member in enumerate(list_of_vinted_members_to_refresh):
-        start_time = time.time()
-        view_booster.open_url("https://www.vinted.pl/")
-        view_booster.decline_all_cookies() if member_number == 0 else None
-        view_booster.choose_option_in_search_item("user")
-        view_booster.search_phrase_in_search_bar(member)
-        view_booster.choose_searched_phrase(member)
-        number_of_items = view_booster.get_number_of_items_of_a_user()
-        while len(view_booster.all_visible_user_items()) != number_of_items:
-            view_booster.scroll_max_down()
-        all_items_url = view_booster.get_all_items_url()
-        print(f"\nCurrent member: {member}")
-        print(f"Number of items found: {number_of_items}")
-        print(f"Number of refreshes for each item: {number_of_refreshes}")
-        print(f"Number of all refreshes for all items: {number_of_refreshes*number_of_items}\n")
-        for item_number, item_url in enumerate(all_items_url, 1):
-            print(f"{item_number}/{len(all_items_url)}: "
-                  f"{item_url[item_url.rfind('/') + item_url[item_url.rfind('/'):].find('-') + 1:]}")
-            view_booster.open_url(item_url)
-            print(f"Current view count: {view_booster.get_current_view_count()}")
-            for refresh_number in range(1, number_of_refreshes + 1):
-                print(f"Refresh no. {refresh_number}/{number_of_refreshes}")
-                view_booster.refresh_page()
+    with ViewBooster() as view_booster:
+        for member_number, member in enumerate(list_of_vinted_members_to_refresh):
+            start_time = time.time()
+            view_booster.open_url("https://www.vinted.pl/")
+            view_booster.decline_all_cookies() if member_number == 0 else None
+            view_booster.choose_option_in_search_item("user")
+            view_booster.search_phrase_in_search_bar(member)
+            view_booster.choose_searched_phrase(member)
+            number_of_items = view_booster.get_number_of_items_of_a_user()
+            while len(view_booster.all_visible_user_items()) != number_of_items:
+                view_booster.scroll_max_down()
+            all_items_url = view_booster.get_all_items_url()
+            print(f"\nCurrent member: {member}")
+            print(f"Number of items found: {number_of_items}")
+            print(f"Number of refreshes for each item: {number_of_refreshes}")
+            print(f"Number of all refreshes for all items: {number_of_refreshes*number_of_items}\n")
+            for item_number, item_url in enumerate(all_items_url, 1):
+                print(f"{item_number}/{len(all_items_url)}: "
+                      f"{item_url[item_url.rfind('/') + item_url[item_url.rfind('/'):].find('-') + 1:]}")
+                view_booster.open_url(item_url)
                 print(f"Current view count: {view_booster.get_current_view_count()}")
-        stop_time = time.time()
-        print(f"Duration: {int(stop_time - start_time)}s")
-    view_booster.close_window()
+                for refresh_number in range(1, number_of_refreshes + 1):
+                    print(f"Refresh no. {refresh_number}/{number_of_refreshes}")
+                    view_booster.refresh_page()
+                    print(f"Current view count: {view_booster.get_current_view_count()}")
+            stop_time = time.time()
+            print(f"Duration: {int(stop_time - start_time)}s")
     print("Everything was refreshed properly for all users! :)")
         
