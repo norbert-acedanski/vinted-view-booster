@@ -59,7 +59,7 @@ class ViewBooster:
             user_xpath = f"//*[@id='content']//a[@class='follow__name' and text()='{phrase}']"
             try:
                 self.driver.find_element(by=By.XPATH, value=user_xpath).click()
-            except NoSuchElementException as e:
+            except NoSuchElementException:
                 if self.driver.find_element(by=By.XPATH,
                                             value="//*[@id='content']//span[@class='empty-state__content']") \
                         .is_displayed():
