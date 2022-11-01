@@ -65,8 +65,7 @@ class ViewBooster:
                         .is_displayed():
                     raise NoSuchElementException("No match found!")
                 else:
-                    print(e)
-                    raise NoSuchElementException()
+                    raise
             self.current_user = phrase
         else:
             raise ValueError("For now, search is defined only for 'user' option")
