@@ -3,8 +3,9 @@ from typing import Literal, List
 
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webelement import WebElement
 
 
@@ -17,7 +18,7 @@ class ViewBooster:
         self.chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
 
     def __enter__(self):
-        self.driver = webdriver.Chrome(executable_path="./chromedriver/chromedriver.exe", options=self.chrome_options)
+        self.driver = webdriver.Chrome(service=Service("./chromedriver/chromedriver.exe"), options=self.chrome_options)
         self.driver.implicitly_wait(10)
         self.current_option = None
         self.current_user = None
@@ -98,7 +99,7 @@ class ViewBooster:
 
 
 if __name__ == "__main__":
-    number_of_refreshes = 4
+    number_of_refreshes = 9
     list_of_vinted_members_to_refresh = ["norbert97a", "stokrotka0299", "kamanna"]
     with ViewBooster() as view_booster:
         for member_number, member in enumerate(list_of_vinted_members_to_refresh):
