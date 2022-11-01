@@ -118,7 +118,7 @@ if __name__ == "__main__":
             print(f"Number of refreshes for each item: {number_of_refreshes}")
             print(f"Number of all refreshes for all items: {number_of_refreshes*number_of_items}\n")
             for item_number, item_url in enumerate(all_items_url, 1):
-                print(f"{item_number}/{len(all_items_url)}: "
+                print(f"\n{item_number}/{len(all_items_url)}: "
                       f"{item_url[item_url.rfind('/') + item_url[item_url.rfind('/'):].find('-') + 1:]}")
                 view_booster.open_url(item_url)
                 print(f"Current view count: {view_booster.get_current_view_count()}")
