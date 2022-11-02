@@ -101,6 +101,8 @@ class ViewBooster:
 if __name__ == "__main__":
     number_of_refreshes = 9
     list_of_vinted_members_to_refresh = ["norbert97a", "stokrotka0299", "kamanna"]
+    duration_dict = {}
+    total_start_time = time.time()
     with ViewBooster() as view_booster:
         for member_number, member in enumerate(list_of_vinted_members_to_refresh):
             start_time = time.time()
@@ -115,8 +117,8 @@ if __name__ == "__main__":
             all_items_url = view_booster.get_all_items_url()
             print(f"\nCurrent member: {member}")
             print(f"Number of items found: {number_of_items}")
-            print(f"Number of refreshes for each item: {number_of_refreshes}")
-            print(f"Number of all refreshes for all items: {number_of_refreshes*number_of_items}\n")
+            print(f"Number of views increased for each item: {number_of_refreshes + 1}")
+            print(f"Number of all views increased for all items: {(number_of_refreshes + 1)*number_of_items}\n")
             for item_number, item_url in enumerate(all_items_url, 1):
                 print(f"\n{item_number}/{len(all_items_url)}: "
                       f"{item_url[item_url.rfind('/') + item_url[item_url.rfind('/'):].find('-') + 1:]}")
@@ -127,6 +129,15 @@ if __name__ == "__main__":
                     view_booster.refresh_page()
                     print(f"Current view count: {view_booster.get_current_view_count()}")
             stop_time = time.time()
-            print(f"Duration: {int(stop_time - start_time)}s")
+            user_duration = int(stop_time - start_time)
+            duration_dict[member] = user_duration
+            print(f"\nDuration for user {member}: {user_duration//60}min {user_duration%60}s")
+    total_stop_time = time.time()
+    if len(list_of_vinted_members_to_refresh) > 1:
+        print("Summary:")
+        print(f"\nDuration for all users: {int(total_stop_time - total_start_time)//60}min "
+              f"{int(total_stop_time - total_start_time)%60}s\n")
+        for member, duration in duration_dict.items():
+            print(f"Duration for {member}: {duration//60}min {duration%60}s")
     print("Everything was refreshed properly for all users! :)")
         
