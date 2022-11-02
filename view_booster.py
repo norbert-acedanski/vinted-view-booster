@@ -24,7 +24,7 @@ class ViewBooster:
         self.current_user = None
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(self, exc_type, exc_val, exc_tb) -> None:
         self.close_window()
 
 # GENERAL
@@ -46,7 +46,7 @@ class ViewBooster:
 
 # MAIN PAGE
 
-    def choose_option_in_search_item(self, option: Literal["item", "user", "forum", "faq"]):
+    def choose_option_in_search_item(self, option: Literal["item", "user", "forum", "faq"]) -> None:
         self.driver.find_element(by=By.XPATH, value="//*[@id='search-item']").click()
         self.driver.find_element(by=By.XPATH, value=f"//*[@data-testid='search-bar-search-type-{option}']").click()
         self.current_option = option
@@ -134,7 +134,7 @@ if __name__ == "__main__":
             print(f"\nDuration for user {member}: {user_duration//60}min {user_duration%60}s")
     total_stop_time = time.time()
     if len(list_of_vinted_members_to_refresh) > 1:
-        print("Summary:")
+        print("\n\nSummary:")
         print(f"\nDuration for all users: {int(total_stop_time - total_start_time)//60}min "
               f"{int(total_stop_time - total_start_time)%60}s\n")
         for member, duration in duration_dict.items():
