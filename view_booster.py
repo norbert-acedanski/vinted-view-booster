@@ -74,7 +74,8 @@ class ViewBooster:
 # USER PAGE
 
     def get_number_of_items_of_a_user(self) -> int:
-        number_of_items_xpath = "//*[@class='profile__items-wrapper']/div[contains(@class, 'Container_container')]//h2//span"
+        number_of_items_xpath = \
+            "//*[@class='profile__items-wrapper']/div[contains(@class, 'Container__container')]//h2/span"
         return int(self.driver.find_element(by=By.XPATH, value=number_of_items_xpath).text.split(" ")[0])
 
     def all_visible_user_items(self) -> List[WebElement]:
