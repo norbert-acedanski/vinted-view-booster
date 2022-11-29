@@ -2,7 +2,7 @@ import time
 from typing import Literal, List
 
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -95,7 +95,7 @@ class ViewBooster:
             return int(self.driver.find_element(
                 by=By.XPATH,
                 value="//div[@class='details-list__item']/div[contains(text(), 'Liczba')]/following-sibling::div").text)
-        except NoSuchElementException:
+        except (NoSuchElementException, StaleElementReferenceException):
             self.refresh_page()
 
 
