@@ -43,4 +43,4 @@ if __name__ == "__main__":
               f"{int(total_stop_time - total_start_time)%60}s\n")
         for member, duration in duration_dict.items():
             print(f"Duration for {member}: {duration//60}min {duration%60}s")
-    print("Everything was refreshed properly for all users! :)")
+    print("\nEverything was refreshed properly for all users! :)")
