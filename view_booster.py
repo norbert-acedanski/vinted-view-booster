@@ -3,7 +3,8 @@ from typing import Literal, List
 
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException
-from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.remote.webelement import WebElement
@@ -18,7 +19,7 @@ class ViewBooster:
         self.chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
 
     def __enter__(self):
-        self.driver = webdriver.Chrome(service=Service("./chromedriver/chromedriver.exe"), options=self.chrome_options)
+        self.driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=self.chrome_options)
         self.driver.implicitly_wait(10)
         self.current_option = None
         self.current_user = None
