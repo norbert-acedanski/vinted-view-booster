@@ -106,7 +106,7 @@ class ViewBooster:
         try:
             return int(self.driver.find_element(
                 by=By.XPATH,
-                value="//div[@class='details-list__item']/div[contains(text(), 'Liczba')]/following-sibling::div").text)
+                value="//div[@data-testid='item-details-view_count']//div[@class='details-list__item-value']").text)
         except (NoSuchElementException, StaleElementReferenceException):
             self.refresh_page()
         
