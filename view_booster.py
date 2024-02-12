@@ -1,3 +1,4 @@
+import logging
 import time
 from typing import Literal, List
 
@@ -31,12 +32,14 @@ class ViewBooster:
 # GENERAL
 
     def open_url(self, url: str) -> None:
+        logging.info(f"Opening url '{url}'")
         self.driver.get(url)
         if "Vinted" not in self.driver.title:
-            f"Expected 'Vinted' in browser title, got '{self.driver.title}' instead, refreshing..."
+            logging.error(f"Expected 'Vinted' in browser title, got '{self.driver.title}' instead, refreshing...")
             self.refresh_page()
 
     def decline_all_cookies(self) -> None:
+        logging.info("Declining cookies...")
         self.driver.find_element(by=By.XPATH, value="//*[@id='onetrust-reject-all-handler']").click()
 
     def refresh_page(self) -> None:
@@ -48,15 +51,18 @@ class ViewBooster:
 # MAIN PAGE
 
     def choose_option_in_search_item(self, option: Literal["item", "user", "forum", "faq"]) -> None:
+        logging.info(f"Choosing search option '{option}'")
         self.driver.find_element(by=By.XPATH, value="//*[@id='search-item']").click()
         self.driver.find_element(by=By.XPATH, value=f"//*[@data-testid='search-bar-search-type-{option}']").click()
         self.current_option = option
 
     def search_phrase_in_search_bar(self, phrase: str) -> None:
+        logging.info(f"Searching phrase '{phrase}'")
         self.driver.find_element(by=By.XPATH, value="//*[@id='search_text']").send_keys(phrase)
         self.driver.find_element(by=By.XPATH, value="//*[@id='search_text']").send_keys(Keys.ENTER)
 
     def choose_searched_phrase(self, phrase: str) -> None:
+        logging.info(f"Choosing searched phrase '{phrase}'")
         if self.current_option == "user":
             user_xpath = f"//*[@id='content']//a[@class='follow__name' and text()='{phrase}']"
             try:
@@ -75,9 +81,12 @@ class ViewBooster:
 # USER PAGE
 
     def get_number_of_items_of_a_user(self) -> int:
+        logging.info("Storing number of items of a user...")
         number_of_items_xpath = \
             "//*[@class='profile__items-wrapper']/div[contains(@class, 'Container__container')]//h2/span"
-        return int(self.driver.find_element(by=By.XPATH, value=number_of_items_xpath).text.split(" ")[0])
+        number_of_items = int(self.driver.find_element(by=By.XPATH, value=number_of_items_xpath).text.split(" ")[0])
+        logging.info(f"{number_of_items} item(s) found!")
+        return number_of_items
 
     def all_visible_user_items(self) -> List[WebElement]:
         return self.driver.find_elements(by=By.XPATH, value="//*[contains(@class, 'feed-grid__item ')]")
@@ -88,10 +97,12 @@ class ViewBooster:
         time.sleep(0.5)
 
     def get_all_items_url(self) -> List[str]:
+        logging.info("Storing urls of all items...")
         items_xpath = "//*[contains(@class, 'feed-grid__item ')]//a"
         return [item.get_attribute('href') for item in self.driver.find_elements(by=By.XPATH, value=items_xpath)]
 
     def get_current_view_count(self) -> int:
+        logging.info("Storing current view count...")
         try:
             return int(self.driver.find_element(
                 by=By.XPATH,
