@@ -1,10 +1,13 @@
+import logging
 import time
 
 from view_booster import ViewBooster
 
+logging.basicConfig(format="%(asctime)s - %(message)s", level=logging.INFO)
+
 if __name__ == "__main__":
     number_of_refreshes = 9
-    list_of_vinted_members_to_refresh = ["norbert97a", "stokrotka0299", "kamanna"]
+    list_of_vinted_members_to_refresh = ["predator97a", "stokrotka0299"]
     duration_dict = {}
     total_start_time = time.time()
     with ViewBooster() as view_booster:
