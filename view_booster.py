@@ -64,7 +64,7 @@ class ViewBooster:
     def choose_searched_phrase(self, phrase: str) -> None:
         logging.info(f"Choosing searched phrase '{phrase}'")
         if self.current_option == "user":
-            user_xpath = f"//*[@id='content']//a[@class='follow__name' and text()='{phrase}']"
+            user_xpath = f"//*[@id='content']//*[@data-testid='profile-username' and text()='{phrase}']"
             try:
                 self.driver.find_element(by=By.XPATH, value=user_xpath).click()
             except NoSuchElementException:
@@ -83,7 +83,7 @@ class ViewBooster:
     def get_number_of_items_of_a_user(self) -> int:
         logging.info("Storing number of items of a user...")
         number_of_items_xpath = \
-            "//*[@class='profile__items-wrapper']/div[contains(@class, 'Container__container')]//h2/span"
+            "//*[@class='profile__items-wrapper']//div[contains(@class, 'Container__container')]//h2"
         number_of_items = int(self.driver.find_element(by=By.XPATH, value=number_of_items_xpath).text.split(" ")[0])
         logging.info(f"{number_of_items} item(s) found!")
         return number_of_items
