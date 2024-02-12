@@ -3,6 +3,9 @@
 # About The Project
 Simple bot for boosting views number for offers on Vinted page for provided users.
 
+# IMPORTANT
+Vinted updated their website, so that when no user is logged in, the views don't count... Therefor it is necessary to logg in as a different user in order to be able to boost views on a desired account.
+
 # Built With
 Python 3.9.10
 
