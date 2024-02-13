@@ -10,6 +10,10 @@ Thus, after a new chrome driver is downloaded (you can see that in logs) change 
 
 Check this answer: https://stackoverflow.com/questions/66989755/getting-403-when-using-selenium-to-automate-checkout-process/67112665#67112665
 
+No matter what I do, it always ends up with 403 Forbidden:
+![img.png](resources/img.png)
+I will appreciate if someone could help with that...
+
 
 # Built With
 Python 3.9.10
