@@ -16,11 +16,16 @@ class ViewBooster:
         self.chrome_options = webdriver.ChromeOptions()
         self.chrome_options.add_argument("--incognito")
         self.chrome_options.add_argument("--disable-notifications")
+        self.chrome_options.add_argument("--disable-blink-features")
+        self.chrome_options.add_argument('--disable-blink-features=AutomationControlled')
+        self.chrome_options.add_argument("--disable-extensions")
         self.chrome_options.add_argument("start-maximized")
-        self.chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
+        self.chrome_options.add_experimental_option('useAutomationExtension', False)
+        self.chrome_options.add_experimental_option("excludeSwitches", ["enable-logging", "enable-automation"])
 
     def __enter__(self):
         self.driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=self.chrome_options)
+        self.driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
         self.driver.implicitly_wait(10)
         self.current_option = None
         self.current_user = None
