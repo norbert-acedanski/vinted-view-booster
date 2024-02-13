@@ -1,10 +1,9 @@
 import logging
 import time
-from fake_useragent import UserAgent
 from typing import Literal, List
 
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException
+from selenium.common.exceptions import NoSuchElementException
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.common.by import By
@@ -17,18 +16,13 @@ class ViewBooster:
         self.chrome_options = webdriver.ChromeOptions()
         self.chrome_options.add_argument("--incognito")
         self.chrome_options.add_argument("--disable-notifications")
-        self.chrome_options.add_argument("--disable-blink-features")
         self.chrome_options.add_argument('--disable-blink-features=AutomationControlled')
         self.chrome_options.add_argument("--disable-extensions")
-        self.chrome_options.add_argument("--remote-allow-origins=*")
         self.chrome_options.add_argument("start-maximized")
-        self.chrome_options.add_argument(f"user-agent={UserAgent().random}")
-        self.chrome_options.add_experimental_option('useAutomationExtension', False)
-        self.chrome_options.add_experimental_option("excludeSwitches", ["enable-logging", "enable-automation"])
+        self.chrome_options.add_experimental_option("excludeSwitches", ["enable-logging"])
 
     def __enter__(self):
         self.driver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()), options=self.chrome_options)
-        self.driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
         self.driver.implicitly_wait(10)
         self.current_option = None
         self.current_user = None
@@ -108,13 +102,4 @@ class ViewBooster:
         logging.info("Storing urls of all items...")
         items_xpath = "//*[contains(@class, 'feed-grid__item ')]//a"
         return [item.get_attribute('href') for item in self.driver.find_elements(by=By.XPATH, value=items_xpath)]
-
-    def get_current_view_count(self) -> int:
-        logging.info("Storing current view count...")
-        try:
-            return int(self.driver.find_element(
-                by=By.XPATH,
-                value="//div[@data-testid='item-details-view_count']//div[@class='details-list__item-value']").text)
-        except (NoSuchElementException, StaleElementReferenceException):
-            self.refresh_page()
         
