@@ -14,7 +14,8 @@ if __name__ == "__main__":
         for member_number, member in enumerate(list_of_vinted_members_to_refresh):
             start_time = time.time()
             view_booster.open_url("https://www.vinted.pl/")
-            view_booster.decline_all_cookies() if member_number == 0 else None
+            # view_booster.decline_all_cookies() if member_number == 0 else None
+            input("Please decline cookies, login with an other account, go back to the main vinted page, and then click Enter...")
             view_booster.choose_option_in_search_item("user")
             view_booster.search_phrase_in_search_bar(member)
             view_booster.choose_searched_phrase(member)
