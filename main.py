@@ -22,28 +22,28 @@ if __name__ == "__main__":
             while len(view_booster.all_visible_user_items()) != number_of_items:
                 view_booster.scroll_max_down()
             all_items_url = view_booster.get_all_items_url()
-            print(f"\nCurrent member: {member}")
-            print(f"Number of items found: {number_of_items}")
-            print(f"Number of views increased for each item: {number_of_refreshes + 1}")
-            print(f"Number of all views increased for all items: {(number_of_refreshes + 1)*number_of_items}\n")
+            logging.info(f"\nCurrent member: {member}")
+            logging.info(f"Number of items found: {number_of_items}")
+            logging.info(f"Number of views increased for each item: {number_of_refreshes + 1}")
+            logging.info(f"Number of all views increased for all items: {(number_of_refreshes + 1)*number_of_items}\n")
             for item_number, item_url in enumerate(all_items_url, 1):
-                print(f"\n{item_number}/{len(all_items_url)}: "
-                      f"{item_url[item_url.rfind('/') + item_url[item_url.rfind('/'):].find('-') + 1:]}")
+                logging.info(f"\n{item_number}/{len(all_items_url)}: "
+                             f"{item_url[item_url.rfind('/') + item_url[item_url.rfind('/'):].find('-') + 1:]}")
                 view_booster.open_url(item_url)
-                print(f"Current view count: {view_booster.get_current_view_count()}")
+                logging.info(f"Current view count: {view_booster.get_current_view_count()}")
                 for refresh_number in range(1, number_of_refreshes + 1):
-                    print(f"Refresh no. {refresh_number}/{number_of_refreshes}")
+                    logging.info(f"Refresh no. {refresh_number}/{number_of_refreshes}")
                     view_booster.refresh_page()
-                    print(f"Current view count: {view_booster.get_current_view_count()}")
+                    logging.info(f"Current view count: {view_booster.get_current_view_count()}")
             stop_time = time.time()
             user_duration = int(stop_time - start_time)
             duration_dict[member] = user_duration
-            print(f"\nDuration for user {member}: {user_duration//60}min {user_duration%60}s")
+            logging.info(f"\nDuration for user {member}: {user_duration//60}min {user_duration%60}s")
     total_stop_time = time.time()
     if len(list_of_vinted_members_to_refresh) > 1:
-        print("\n\nSummary:")
-        print(f"\nDuration for all users: {int(total_stop_time - total_start_time)//60}min "
-              f"{int(total_stop_time - total_start_time)%60}s\n")
+        logging.info("\n\nSummary:")
+        logging.info(f"\nDuration for all users: {int(total_stop_time - total_start_time)//60}min "
+                     f"{int(total_stop_time - total_start_time)%60}s\n")
         for member, duration in duration_dict.items():
-            print(f"Duration for {member}: {duration//60}min {duration%60}s")
-    print("\nEverything was refreshed properly for all users! :)")
+            logging.info(f"Duration for {member}: {duration//60}min {duration%60}s")
+    logging.info("\nEverything was refreshed properly for all users! :)")
