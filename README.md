@@ -6,6 +6,11 @@ Simple bot for boosting views number for offers on Vinted page for provided user
 # IMPORTANT
 Vinted updated their website, so that when no user is logged in, the views don't count... Therefor it is necessary to logg in as a different user in order to be able to boost views on a desired account.
 
+Thus, after a new chrome driver is downloaded (you can see that in logs) change each `cdc_` appearance in chromedriver to for example `dog_` (it is important to replace the string with the same number of letters!)
+
+Check this answer: https://stackoverflow.com/questions/66989755/getting-403-when-using-selenium-to-automate-checkout-process/67112665#67112665
+
+
 # Built With
 Python 3.9.10
 
