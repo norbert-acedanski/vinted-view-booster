@@ -1,5 +1,6 @@
 import logging
 import time
+from fake_useragent import UserAgent
 from typing import Literal, List
 
 from selenium import webdriver
@@ -19,7 +20,9 @@ class ViewBooster:
         self.chrome_options.add_argument("--disable-blink-features")
         self.chrome_options.add_argument('--disable-blink-features=AutomationControlled')
         self.chrome_options.add_argument("--disable-extensions")
+        self.chrome_options.add_argument("--remote-allow-origins=*")
         self.chrome_options.add_argument("start-maximized")
+        self.chrome_options.add_argument(f"user-agent={UserAgent().random}")
         self.chrome_options.add_experimental_option('useAutomationExtension', False)
         self.chrome_options.add_experimental_option("excludeSwitches", ["enable-logging", "enable-automation"])
 
